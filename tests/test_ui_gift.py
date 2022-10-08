@@ -17,6 +17,6 @@ def test_gift_cards(browser, base_url):
         digift_page.scroll_to_par()
     with allure.step("Найти все кнопки с номиналом карт"):
         cards = digift_page.find_gift_cards()
-    for card in cards:
-        with allure.step(f"Кнопка {card.text}"):
-            digift_page.click_on_card(card)
+        for card in cards:
+            with allure.step(f"Кнопка {card.text}"):
+                digift_page.click_on_card(card)
