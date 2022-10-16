@@ -1,23 +1,15 @@
 import os
 import pytest
-
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 
 from endpoints.lenvendo import LenvendoAPI
 
 
 def pytest_addoption(parser):
-    parser.addoption("--chrome", action="store", default=os.getenv("CHROME"))
     parser.addoption("--url", action="store", default=os.getenv("URL"))
     parser.addoption("--api", action="store", default=os.getenv("API"))
     parser.addoption("--search", action="store", default=os.getenv("SEARCH"))
     parser.addoption("--sort_field", action="store", default=os.getenv("SORT_FIELD"))
-
-
-@pytest.fixture()
-def chrome(request):
-    return request.config.option.chrome
 
 
 @pytest.fixture()
@@ -26,8 +18,20 @@ def base_url(request):
 
 
 @pytest.fixture()
-def browser(chrome):
-    driver = webdriver.Chrome(service=Service(chrome))
+def browser():
+    options = webdriver.ChromeOptions()
+    options.set_capability("browserName", "chrome")
+    options.set_capability("browserVersion", "106.0")
+    options.set_capability("selenoid:options", {
+        "enableVNC": True,
+        "enableVideo": False,
+        "screenResolution": "1280x1024x24"
+    })
+
+    driver = webdriver.Remote(
+        command_executor="http://127.0.0.1:4444/wd/hub",
+        options=options)
+    driver.maximize_window()
     yield driver
     driver.quit()
 
