@@ -1,7 +1,6 @@
-from utils.BaseApp import BasePage
+from .BaseApp import BasePage
 
 from selenium.webdriver.common.by import By
-import allure
 
 
 class DigiftLocators:
