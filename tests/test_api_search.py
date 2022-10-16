@@ -1,6 +1,7 @@
 import allure
 
 from utils.model_lenvendo import JsTestTask
+from utils.check_json_response import check_json
 
 
 @allure.epic('API тесты')
@@ -14,20 +15,12 @@ def test_search(lenvendo_api, api, params):
         response = lenvendo_api.get(params)
     with allure.step(f"Статус код успешный (200)"):
         assert response.status_code == 200
-    with allure.step(f"Ответ не пустой"):
-        assert response.json() != '' or None
-    with allure.step(f"Каждый json-объект имеет ключи name, image, price"):
+    with allure.step(f"Ответ содержит всю информацию по шаблону, "
+                     f"также содержит слово {params.get('search')} в поле {params.get('sort_field')}"):
+        check_json(response.json(), params['search'])
         phones = list(map(lambda obj: JsTestTask(**obj), response.json()['products']))
-    if params.get('search', None) is not None:
-        with allure.step(f"Каждый json-объект в поле {params.get('sort_field')} содержит слово {params.get('search')}"):
-            name_src = list()
-            for phone in phones:
-                assert params['search'] in phone.name
-                name_src.append(phone.name.lower())
-    else:
-        name_src = list()
-        for phone in phones:
-            name_src.append(phone.name.lower())
+
+    name_src = list(map(lambda phone: phone.name.lower(), phones))
 
     if params.get('sort_field', None) is not None:
         name_new = sorted(name_src)
