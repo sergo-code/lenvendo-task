@@ -1,7 +1,7 @@
 import allure
 
 from utils.model_lenvendo import JsTestTask
-from utils.check_json_response import check_json
+from json_schema.get_js_test_task_data import check_json_schema
 
 
 @allure.epic('API тесты')
@@ -17,7 +17,7 @@ def test_search(lenvendo_api, api, params):
         assert response.status_code == 200
     with allure.step(f"Ответ содержит всю информацию по шаблону, "
                      f"также содержит слово {params.get('search')} в поле {params.get('sort_field')}"):
-        check_json(response.json(), params['search'])
+        check_json_schema(response.json(), params['search'])
         phones = list(map(lambda obj: JsTestTask(**obj), response.json()['products']))
 
     name_src = list(map(lambda phone: phone.name.lower(), phones))

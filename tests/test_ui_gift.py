@@ -1,6 +1,6 @@
 import allure
 
-from page_objects.DigiftPage import Digift
+from ui.page_objects.main_page import MainPage
 
 
 @allure.epic('UI тесты')
@@ -10,7 +10,7 @@ from page_objects.DigiftPage import Digift
                     '1. Кнопки активируются.\n'
                     '2. В поле ввода "Введите" отображается выбранный номинал.')
 def test_gift_cards(browser, base_url):
-    digift_page = Digift(browser, base_url)
+    digift_page = MainPage(browser, base_url)
     with allure.step(f"Открыть страницу"):
         digift_page.go_to_site()
     with allure.step("Пролистать страницу до 'Номинал карты'"):

@@ -1,34 +1,33 @@
 # lenvendo-task
+## Последние изменения
+1) Добавлена проверка API с помощью json schema  
+2) Добавлен запуск на selenoid  
+3) Добавлено отображение тестов на selenoid-ui  
+4) Добавлен запуск через Jenkins
 
-## Скачать chromedriver
-Для работы необходимо установить [chromedriver](https://chromedriver.storage.googleapis.com/index.html)
-в соответствии с вашей версии Chrome и ОС, и переместить в корень проекта
+## Запуск тестов.
+Необходимые параметры для UI теста
+ - browser_name (наименование браузера)
+    - chrome
+    - firefox
+- hub (адрес хаба на котором выполняются тесты в selenoid)
+- hub_port (порт хаба)
+- enable_vnc (включить/выключить удаленный простотр и доступ в selenium-ui)
+  - true
+  - false  
 
-Настройка pytest.ini
-- Windows
-```
-CHROME=./chromedriver.exe
-```
-- Linux / MacOS
-```
-CHROME=./chromedriver
-```
+Необходимые параметры для API теста
+- url (ссылка на адрес ресурса)
+- api (путь к вызову апи)
+- search (поле поиска)
+- sort_field (поле сортировки)
 
-## Создать окружение
-```
-python3 -m venv venv
-```
-
-## Установить зависимости
-```
-python -m pip install -r requirements.txt
-```
-
-## Использование
-```
-pytest -v --setup-show --alluredir=./allure-report
+## Пример запуска тестов
+```commandline
+python -m pytest --browser_name='chrome' --browser_version='106.0' --hub='192.168.0.102' --hub_port='4444'
 ```
 
-Для просмотра отчета необходимо установить 
-[Allure Framework](https://docs.qameta.io/allure-report/#_installing_a_commandline)
-в соответствии с ващей ОС.
+## Отчеты Allure
+Реализовано формирование отчетов с использованием фреймворка Allure. 
+Файлы отчета складываются в каталог "allure-results" в корне проекта. 
+(Каталог для формирования отчетов прописан в файле "pytest.ini")
